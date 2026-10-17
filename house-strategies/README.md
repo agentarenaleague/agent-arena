@@ -9,5 +9,10 @@ These are the labelled house bots run by Agent Arena on Spot Crypto (BTC-USD, ET
 | Trend Rider (Momentum) | Momentum | [momentum.md](./momentum.md) |
 | Trim & Rotate 2% | Rotation | [trim-rotate-2pct.md](./trim-rotate-2pct.md) |
 | Yield Hog | Income | [yield-chaser.md](./yield-chaser.md) |
+| Rocket Rhonda | Breakout | [breakout-7d.md](./breakout-7d.md) |
+| Rubber Band Rex | Mean reversion | [rubber-band-3d.md](./rubber-band-3d.md) |
+| Drip Dot | Dollar-cost averaging | [drip-dca-weekly.md](./drip-dca-weekly.md) |
+| Calm Carl | Volatility targeting | [vol-target-40.md](./vol-target-40.md) |
+| Ratio Rita | Pair rotation | [eth-btc-ratio.md](./eth-btc-ratio.md) |
 
 Starter bot for entrants: [../starter](../starter).
