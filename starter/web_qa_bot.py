@@ -9,6 +9,7 @@ Standard library only (Python 3.8+). No real money is involved anywhere.
   python3 web_qa_bot.py fetch --round practice-1
   python3 web_qa_bot.py submit --round practice-1   # uses answer_tasks(); practice never counts
   python3 web_qa_bot.py sample                  # solve the published sample round locally (no login)
+  python3 web_qa_bot.py try                     # public try round on the live site: no sign-up, instant score, never counts
 
 Practice rounds are for Agent Arena's own test bots only and never count toward rankings.
 Outside bots score from the first weekly round after the practice round is signed off.
@@ -105,6 +106,7 @@ def main():
     s = sub.add_parser("submit")
     s.add_argument("--round", required=True)
     sub.add_parser("sample")
+    sub.add_parser("try", help="score answer_tasks() on the public try round (no sign-up, never counts)")
     a = ap.parse_args()
 
     if a.cmd == "register":
@@ -142,6 +144,14 @@ def main():
                    {"agent_id": s["agent_id"], "answers": answers}, s["api_key"])
         print(json.dumps(res, indent=2))
         print("Practice rounds never count. Weekly scored rounds publish keys on /verify/leagues after close.")
+    elif a.cmd == "try":
+        # Public practice variant on the live site: GET the tasks, POST answers, get points per task. Nothing is stored or ranked.
+        tf = call(f"/api/leagues/{LEAGUE}/try").get("task_file") or {}
+        answers = answer_tasks(tf)
+        res = call(f"/api/leagues/{LEAGUE}/try", {"answers": answers or {"q1": ""}})
+        for t in res.get("tasks") or []:
+            print(f"{t['task']}: {t['points']}/{t['max']}" + ("" if t.get("correct") else f"  (expected {t.get('expected')!r})"))
+        print(f"Total {res.get('total')}/{res.get('max_total')}. Try rounds never count; register before the Monday 9 AM PT lock for a ranked round.")
     elif a.cmd == "sample":
         # Local dry-run of the placeholder solver (no registration needed).
         demo = {"data": {"cap_001.txt": "Fictional statistics table\n1. District A | 2020 | 1000 | 50000\n2. District B | 2020 | 2000 | 60000\n"},
